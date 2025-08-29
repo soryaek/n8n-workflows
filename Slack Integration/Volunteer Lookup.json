@@ -1,0 +1,200 @@
+{
+  "name": "Volunteer Lookup",
+  "nodes": [
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+      "typeVersion": 1.3,
+      "position": [
+        -512,
+        -128
+      ],
+      "id": "2410626e-077f-43d0-9795-486b7edd83b8",
+      "name": "When chat message received",
+              "webhookId": "{{CHAT_WEBHOOK_ID}}"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $json.chatInput || $json.blocks[0].elements[0].elements[1].text }}",
+        "options": {
+          "systemMessage": "You are a helpful assistant\n\n## Column Headings\n- ID\t\n- Full Name\n- First Name\t\n- Last Name\t\n- Phone\t\n- Email\t\n- Events\t\n- Manager\t\n- Active"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.2,
+      "position": [
+        -288,
+        -224
+      ],
+      "id": "63515687-9388-455d-ac6c-655b74d5e417",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gpt-4.1-mini"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        -280,
+        0
+      ],
+      "id": "60218131-8dbc-4d44-af39-526ad582c395",
+      "name": "OpenAI Chat Model",
+      "credentials": {
+        "openAiApi": {
+          "id": "{{OPENAI_CREDENTIAL_ID}}",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "endpointUrl": "{{MCP_ENDPOINT_URL}}",
+        "serverTransport": "httpStreamable",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.mcpClientTool",
+      "typeVersion": 1.1,
+      "position": [
+        -152,
+        0
+      ],
+      "id": "99a81ea4-7c60-4494-a059-14526154cc5f",
+      "name": "MCP Client"
+    },
+    {
+      "parameters": {
+        "trigger": [
+          "app_mention"
+        ],
+        "channelId": {
+          "__rl": true,
+          "value": "{{SLACK_CHANNEL_ID}}",
+          "mode": "list",
+          "cachedResultName": "all-n8n-automation-team"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.slackTrigger",
+      "typeVersion": 1,
+      "position": [
+        -512,
+        -320
+      ],
+      "id": "9196caaa-d86c-4b7d-8203-f048f37d08b8",
+      "name": "Slack Trigger",
+      "webhookId": "{{SLACK_WEBHOOK_ID}}",
+      "credentials": {
+        "slackApi": {
+          "id": "{{SLACK_CREDENTIAL_ID}}",
+          "name": "Slack account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "select": "channel",
+        "channelId": {
+          "__rl": true,
+          "value": "={{ $('Slack Trigger').item.json.channel }}",
+          "mode": "id"
+        },
+        "text": "={{ $json.output }}",
+        "otherOptions": {}
+      },
+      "type": "n8n-nodes-base.slack",
+      "typeVersion": 2.3,
+      "position": [
+        64,
+        -224
+      ],
+      "id": "dede422d-60d8-4236-844d-2c885f76cc48",
+      "name": "Send a message",
+      "webhookId": "{{SLACK_SEND_WEBHOOK_ID}}",
+      "credentials": {
+        "slackApi": {
+          "id": "{{SLACK_CREDENTIAL_ID}}",
+          "name": "Slack account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When chat message received": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "MCP Client": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Slack Trigger": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "Send a message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "8170d297-941e-4a6d-954c-6bc3d024c75d",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "{{N8N_INSTANCE_ID}}"
+  },
+  "id": "L9OaYgKoAG22NvtJ",
+  "tags": []
+}
