@@ -148,10 +148,6 @@ We welcome contributions! When adding new workflows:
 - [Slack API](https://api.slack.com/)
 - [OpenAI API](https://platform.openai.com/docs)
 
-## 📄 **License**
-
-This project is open source and available under the MIT License.
-
 ## 🆘 **Support**
 
 For issues or questions:
