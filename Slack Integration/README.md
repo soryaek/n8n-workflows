@@ -2,6 +2,8 @@
 
 A collection of n8n workflows that create an intelligent volunteer management system by integrating Slack with Google Sheets using AI-powered queries and automated responses.
 
+[![n8n Workflow Demo](https://img.youtube.com/vi/39kpqIoT0tE/0.jpg)](https://youtu.be/39kpqIoT0tE)
+
 ## 🎯 **What This Project Does**
 
 This automation system allows team members to:
