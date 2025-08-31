@@ -135,14 +135,6 @@ Users can ask questions like:
 3. Test individual workflow nodes
 4. Confirm API rate limits aren't exceeded
 
-## 🤝 **Contributing**
-
-We welcome contributions! When adding new workflows:
-1. Use placeholder variables for all sensitive data
-2. Include clear documentation
-3. Test thoroughly before submitting
-4. Follow the existing naming conventions
-
 ## 📚 **Resources**
 
 - [n8n Documentation](https://docs.n8n.io/)
@@ -155,8 +147,7 @@ We welcome contributions! When adding new workflows:
 For issues or questions:
 1. Check the troubleshooting section above
 2. Review n8n community forums
-3. Open an issue in this repository
-4. Check the n8n documentation
+3. Check the n8n documentation
 
 ---
 
